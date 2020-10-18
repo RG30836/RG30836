@@ -2805,6 +2805,24 @@ bbox.getBottom();this._isEnabled=true;this._StartTicking()}}}};
 'use strict';{const C3=self.C3;C3.Behaviors.Anchor.Exps={}};
 
 
+'use strict';{const C3=self.C3;C3.Behaviors.destroy=class DestroyOutsideLayoutBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.destroy.Type=class DestroyOutsideLayoutType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.destroy.Instance=class DestroyOutsideLayoutInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._StartTicking()}Release(){super.Release()}Tick(){const wi=this._inst.GetWorldInfo();const bbox=wi.GetBoundingBox();const layout=wi.GetLayout();if(bbox.getRight()<0||bbox.getBottom()<0||bbox.getLeft()>layout.GetWidth()||bbox.getTop()>layout.GetHeight())this._runtime.DestroyInstance(this._inst)}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.destroy.Cnds={}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.destroy.Acts={}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.destroy.Exps={}};
+
+
 'use strict';{const C3=self.C3;C3.Behaviors.EightDir=class EightDirBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
 
 
@@ -2876,6 +2894,7 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Text,
 		C3.Plugins.Button,
 		C3.Plugins.Keyboard,
+		C3.Behaviors.destroy,
 		C3.Behaviors.EightDir,
 		C3.Behaviors.scrollto,
 		C3.Plugins.Button.Cnds.OnClicked,
@@ -2900,6 +2919,7 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Cnds.IsHost,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.Multiplayer.Acts.AssociateObjectWithPeer,
 		C3.Plugins.Multiplayer.Exps.MyID,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
@@ -2915,17 +2935,16 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Cnds.OnPeerDisconnected,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.System.Cnds.ForEach,
-		C3.Plugins.System.Cnds.Compare,
-		C3.Plugins.System.Exps.getbit,
-		C3.Plugins.Sprite.Acts.SetMirrored,
 		C3.Behaviors.EightDir.Cnds.IsMoving,
 		C3.Plugins.Sprite.Acts.SetAnim,
-		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Multiplayer.Exps.PeerID,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Behaviors.EightDir.Acts.SimulateControl,
+		C3.Plugins.Sprite.Acts.SetMirrored,
 		C3.Plugins.Multiplayer.Exps.PeerState,
+		C3.Plugins.System.Exps.getbit,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Multiplayer.Acts.InputPredictObject,
 		C3.Plugins.Multiplayer.Cnds.OnClientUpdate,
@@ -2949,6 +2968,8 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		{liam: 0},
 		{avery: 0},
 		{Keyboard: 0},
+		{DestroyOutsideLayout: 0},
+		{TestBox: 0},
 		{"8Direction": 0},
 		{ScrollTo: 0},
 		{Players: 0},
@@ -3087,6 +3108,8 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		() => "You are the host.",
 		() => "Host",
 		() => "Miles",
+		() => 427,
+		() => 240,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
@@ -3114,21 +3137,8 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (("> " + f0()) + " disconnected.");
 		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => f0(n1.ExpInstVar_Family(), 1);
-		},
-		() => 1,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => f0(n1.ExpInstVar_Family(), 3);
-		},
 		() => "1",
 		() => "0",
-		() => 427,
-		() => 240,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -3139,10 +3149,21 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpInstVar_Family(), 0);
 		},
+		() => 1,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpInstVar_Family(), 1);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpInstVar_Family(), 2);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpInstVar_Family(), 3);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
