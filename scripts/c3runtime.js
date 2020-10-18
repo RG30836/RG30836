@@ -2780,6 +2780,107 @@ case 114:return"F3";case 115:return"F4";case 116:return"F5";case 117:return"F6";
 C3.Plugins.Keyboard.Exps={LastKeyCode(){return this._triggerWhich},StringFromKeyCode(kc){return StringFromCharCode(kc)},TypedKey(){return this._triggerTypedKey}}};
 
 
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo=class PlatformInfoPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo.Type=class PlatformInfoType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;const DOM_COMPONENT_ID="platform-info";C3.Plugins.PlatformInfo.Instance=class PlatformInfoInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._screenWidth=0;this._screenHeight=0;this._windowOuterWidth=0;this._windowOuterHeight=0;this._safeAreaInset=[0,0,0,0];this._supportsWakeLock=false;this._isWakeLockActive=false;this.AddDOMMessageHandlers([["window-resize",e=>this._OnWindowResize(e)],["wake-lock-acquired",e=>this._OnWakeLockAcquired(e)],
+["wake-lock-error",e=>this._OnWakeLockError(e)],["wake-lock-released",e=>this._OnWakeLockReleased(e)]]);if(navigator.connection)navigator.connection.addEventListener("change",()=>this._OnNetworkChange());this._runtime.AddLoadPromise(this.PostToDOMAsync("get-initial-state").then(data=>{this._screenWidth=data["screenWidth"];this._screenHeight=data["screenHeight"];this._windowOuterWidth=data["windowOuterWidth"];this._windowOuterHeight=data["windowOuterHeight"];this._safeAreaInset=data["safeAreaInset"];
+this._supportsWakeLock=data["supportsWakeLock"]}))}Release(){super.Release()}_OnWindowResize(e){this._windowOuterWidth=e["windowOuterWidth"];this._windowOuterHeight=e["windowOuterHeight"];this._safeAreaInset=e["safeAreaInset"]}async _OnNetworkChange(){await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnNetworkChange)}async _OnWakeLockAcquired(){this._isWakeLockActive=true;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockAcquired)}async _OnWakeLockError(){this._isWakeLockActive=false;
+await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockError)}async _OnWakeLockReleased(){this._isWakeLockActive=false;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockReleased)}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo.Cnds={IsOnMobile(){return C3.Platform.IsMobile},IsOnWindows(){return C3.Platform.OS==="Windows"},IsOnMacOS(){return C3.Platform.OS==="Mac OS X"},IsOnLinux(){return C3.Platform.OS==="Linux"},IsOnChromeOS(){return C3.Platform.OS==="Chrome OS"},IsOnAndroid(){return C3.Platform.OS==="Android"},IsOniOS(){return C3.Platform.OS==="iOS"},IsWebExport(){const exportType=this._runtime.GetExportType();return exportType==="html5"||exportType==="scirra-arcade"||
+exportType==="preview"||exportType==="instant-games"},IsCordovaExport(){return this._runtime.IsCordova()},IsNWjsExport(){return this._runtime.GetExportType()==="nwjs"},IsWindowsUWPExport(){return this._runtime.GetExportType()==="windows-uwp"},OnNetworkChange(){return true},OnWakeLockAcquired(){return true},OnWakeLockError(){return true},OnWakeLockReleased(){return true},IsWakeLockActive(){return this._isWakeLockActive},IsWakeLockSupported(){return this._supportsWakeLock}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo.Acts={RequestWakeLock(){if(!this._supportsWakeLock)return;this._PostToDOMMaybeSync("request-wake-lock")},ReleaseWakeLock(){if(!this._supportsWakeLock)return;this._isWakeLockActive=false;this.PostToDOM("release-wake-lock")}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.PlatformInfo.Exps={Renderer(){const renderer=this._runtime.GetWebGLRenderer();let ret="webgl"+renderer.GetWebGLVersionNumber();if(renderer.HasMajorPerformanceCaveat())ret+="-software";return ret},RendererDetail(){return this._runtime.GetWebGLRenderer().GetUnmaskedRenderer()},DevicePixelRatio(){return self.devicePixelRatio},ScreenWidth(){return this._screenWidth},ScreenHeight(){return this._screenHeight},WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},
+WindowInnerHeight(){return this._runtime.GetCanvasManager().GetLastHeight()},WindowOuterWidth(){return this._windowOuterWidth},WindowOuterHeight(){return this._windowOuterHeight},CanvasCssWidth(){return this._runtime.GetCanvasManager().GetCssWidth()},CanvasCssHeight(){return this._runtime.GetCanvasManager().GetCssHeight()},CanvasDeviceWidth(){return this._runtime.GetCanvasManager().GetDeviceWidth()},CanvasDeviceHeight(){return this._runtime.GetCanvasManager().GetDeviceHeight()},Downlink(){if(navigator.connection)return navigator.connection["downlink"]||
+0;else return 0},DownlinkMax(){if(navigator.connection)return navigator.connection["downlinkMax"]||0;else return 0},ConnectionType(){if(navigator.connection)return navigator.connection["type"]||"unknown";else return"unknown"},ConnectionEffectiveType(){if(navigator.connection)return navigator.connection["effectiveType"]||"unknown";else return"unknown"},ConnectionRTT(){if(navigator.connection)return navigator.connection["rtt"]||0;else return 0},HardwareConcurrency(){return navigator.hardwareConcurrency||
+0},DeviceMemory(){return navigator.deviceMemory||0},SafeAreaInsetTop(){return this._safeAreaInset[0]},SafeAreaInsetRight(){return this._safeAreaInset[1]},SafeAreaInsetBottom(){return this._safeAreaInset[2]},SafeAreaInsetLeft(){return this._safeAreaInset[3]}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.Touch=class TouchPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.Touch.Type=class TouchType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}GetScriptInterfaceClass(){return self.ITouchObjectType}};let touchObjectType=null;function GetTouchSdkInstance(){return touchObjectType.GetSingleGlobalInstance().GetSdkInstance()}self.ITouchObjectType=class ITouchObjectType extends self.IObjectClass{constructor(objectType){super(objectType);touchObjectType=objectType;objectType.GetRuntime()._GetCommonScriptInterfaces().touch=
+this}requestPermission(type){const touchInst=GetTouchSdkInstance();if(type==="orientation")return touchInst._RequestPermission(0);else if(type==="motion")return touchInst._RequestPermission(1);else throw new Error("invalid type");}}};
+
+
+'use strict';{const C3=self.C3;const DOM_COMPONENT_ID="touch";C3.Plugins.Touch.Instance=class TouchInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._touches=new Map;this._useMouseInput=false;this._isMouseDown=false;this._orientCompassHeading=0;this._orientAlpha=0;this._orientBeta=0;this._orientGamma=0;this._accX=0;this._accY=0;this._accZ=0;this._accWithGX=0;this._accWithGY=0;this._accWithGZ=0;this._triggerIndex=0;this._triggerId=0;this._triggerPermission=
+0;this._curTouchX=0;this._curTouchY=0;this._getTouchIndex=0;this._permissionPromises=[];if(properties)this._useMouseInput=properties[0];this.AddDOMMessageHandler("permission-result",e=>this._OnPermissionResult(e));const rt=this.GetRuntime().Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"pointerdown",e=>this._OnPointerDown(e.data)),C3.Disposable.From(rt,"pointermove",e=>this._OnPointerMove(e.data)),C3.Disposable.From(rt,"pointerup",e=>this._OnPointerUp(e.data,false)),
+C3.Disposable.From(rt,"pointercancel",e=>this._OnPointerUp(e.data,true)),C3.Disposable.From(rt,"deviceorientation",e=>this._OnDeviceOrientation(e.data)),C3.Disposable.From(rt,"deviceorientationabsolute",e=>this._OnDeviceOrientationAbsolute(e.data)),C3.Disposable.From(rt,"devicemotion",e=>this._OnDeviceMotion(e.data)),C3.Disposable.From(rt,"tick2",e=>this._OnTick2()))}Release(){this._touches.clear();super.Release()}_OnPointerDown(e){if(e["pointerType"]==="mouse")if(this._useMouseInput)this._isMouseDown=
+true;else return;const pointerId=e["pointerId"];if(this._touches.has(pointerId))return;const x=e["pageX"]-this._runtime.GetCanvasClientX();const y=e["pageY"]-this._runtime.GetCanvasClientY();const nowTime=e["timeStamp"];const index=this._touches.size;this._triggerIndex=index;this._triggerId=pointerId;const touchInfo=C3.New(C3.Plugins.Touch.TouchInfo);touchInfo.Init(nowTime,x,y,pointerId,index);this._touches.set(pointerId,touchInfo);this.Trigger(C3.Plugins.Touch.Cnds.OnNthTouchStart);this.Trigger(C3.Plugins.Touch.Cnds.OnTouchStart);
+this._curTouchX=x;this._curTouchY=y;this.Trigger(C3.Plugins.Touch.Cnds.OnTouchObject)}_OnPointerMove(e){if(e["pointerType"]==="mouse"&&!this._isMouseDown)return;const touchInfo=this._touches.get(e["pointerId"]);if(!touchInfo)return;const nowTime=e["timeStamp"];if(nowTime-touchInfo.GetTime()<2)return;const x=e["pageX"]-this._runtime.GetCanvasClientX();const y=e["pageY"]-this._runtime.GetCanvasClientY();touchInfo.Update(nowTime,x,y,e["width"],e["height"],e["pressure"])}_OnPointerUp(e,isCancel){if(e["pointerType"]===
+"mouse")if(this._isMouseDown)this._isMouseDown=false;else return;const nowTime=e["timeStamp"];const pointerId=e["pointerId"];const touchInfo=this._touches.get(pointerId);if(!touchInfo)return;this._triggerIndex=touchInfo.GetStartIndex();this._triggerId=touchInfo.GetId();this.Trigger(C3.Plugins.Touch.Cnds.OnNthTouchEnd);this.Trigger(C3.Plugins.Touch.Cnds.OnTouchEnd);if(!isCancel){const tap=touchInfo.ShouldTriggerTap(nowTime);if(tap==="single-tap"){this.Trigger(C3.Plugins.Touch.Cnds.OnTapGesture);this._curTouchX=
+touchInfo.GetX();this._curTouchY=touchInfo.GetY();this.Trigger(C3.Plugins.Touch.Cnds.OnTapGestureObject)}else if(tap==="double-tap"){this.Trigger(C3.Plugins.Touch.Cnds.OnDoubleTapGesture);this._curTouchX=touchInfo.GetX();this._curTouchY=touchInfo.GetY();this.Trigger(C3.Plugins.Touch.Cnds.OnDoubleTapGestureObject)}}touchInfo.Release();this._touches.delete(pointerId)}_RequestPermission(type){this._PostToDOMMaybeSync("request-permission",{"type":type});return new Promise((resolve,reject)=>{this._permissionPromises.push({type,
+resolve,reject})})}_OnPermissionResult(e){const isGranted=e["result"];const type=e["type"];this._triggerPermission=type;const toResolve=this._permissionPromises.filter(o=>o.type===type);for(const o of toResolve)o.resolve(isGranted?"granted":"denied");this._permissionPromises=this._permissionPromises.filter(o=>o.type!==type);if(isGranted){this.Trigger(C3.Plugins.Touch.Cnds.OnPermissionGranted);if(type===0)this._runtime.RequestDeviceOrientationEvent();else this._runtime.RequestDeviceMotionEvent()}else this.Trigger(C3.Plugins.Touch.Cnds.OnPermissionDenied)}_OnDeviceOrientation(e){if(typeof e["webkitCompassHeading"]===
+"number")this._orientCompassHeading=e["webkitCompassHeading"];else if(e["absolute"])this._orientCompassHeading=e["alpha"];this._orientAlpha=e["alpha"];this._orientBeta=e["beta"];this._orientGamma=e["gamma"]}_OnDeviceOrientationAbsolute(e){this._orientCompassHeading=e["alpha"]}_OnDeviceMotion(e){const acc=e["acceleration"];if(acc){this._accX=acc["x"];this._accY=acc["y"];this._accZ=acc["z"]}const withG=e["accelerationIncludingGravity"];if(withG){this._accWithGX=withG["x"];this._accWithGY=withG["y"];
+this._accWithGZ=withG["z"]}}_OnTick2(){const nowTime=performance.now();let index=0;for(const touchInfo of this._touches.values()){if(touchInfo.GetTime()<=nowTime-50)touchInfo._SetLastTime(nowTime);if(touchInfo.ShouldTriggerHold(nowTime)){this._triggerIndex=touchInfo.GetStartIndex();this._triggerId=touchInfo.GetId();this._getTouchIndex=index;this.Trigger(C3.Plugins.Touch.Cnds.OnHoldGesture);this._curTouchX=touchInfo.GetX();this._curTouchY=touchInfo.GetY();this.Trigger(C3.Plugins.Touch.Cnds.OnHoldGestureObject);
+this._getTouchIndex=0}++index}}_GetTouchByIndex(index){index=Math.floor(index);for(const touchInfo of this._touches.values()){if(index===0)return touchInfo;--index}return null}_IsClientPosOnCanvas(touchX,touchY){return touchX>=0&&touchY>=0&&touchX<this._runtime.GetCanvasCssWidth()&&touchY<this._runtime.GetCanvasCssHeight()}GetDebuggerProperties(){const prefix="plugins.touch.debugger";return[{title:prefix+".touches",properties:[...this._touches.values()].map(ti=>({name:"$"+ti.GetId(),value:ti.GetX()+
+", "+ti.GetY()}))}]}}};
+
+
+'use strict';{const C3=self.C3;const tempArr=[];C3.Plugins.Touch.Cnds={OnTouchStart(){return true},OnTouchEnd(){return true},IsInTouch(){return this._touches.size>0},OnTouchObject(objectClass){if(!objectClass)return false;if(!this._IsClientPosOnCanvas(this._curTouchX,this._curTouchY))return false;return this._runtime.GetCollisionEngine().TestAndSelectCanvasPointOverlap(objectClass,this._curTouchX,this._curTouchY,false)},IsTouchingObject(objectClass){if(!objectClass)return false;const sol=objectClass.GetCurrentSol();
+const instances=sol.GetInstances();for(const inst of instances){const wi=inst.GetWorldInfo();const layer=wi.GetLayer();for(const touchInfo of this._touches.values()){if(!this._IsClientPosOnCanvas(touchInfo.GetX(),touchInfo.GetY()))continue;const [px,py]=layer.CanvasCssToLayer(touchInfo.GetX(),touchInfo.GetY(),wi.GetTotalZElevation());if(wi.ContainsPoint(px,py)){tempArr.push(inst);break}}}if(tempArr.length){sol.SetArrayPicked(tempArr);objectClass.ApplySolToContainer();C3.clearArray(tempArr);return true}else return false},
+CompareTouchSpeed(index,cmp,s){const touchInfo=this._GetTouchByIndex(index);if(!touchInfo)return false;return C3.compare(touchInfo.GetSpeed(),cmp,s)},OrientationSupported(){return true},MotionSupported(){return true},CompareOrientation(orientation,cmp,a){this._runtime.RequestDeviceOrientationEvent();let v=0;if(orientation===0)v=this._orientAlpha;else if(orientation===1)v=this._orientBeta;else v=this._orientGamma;return C3.compare(v,cmp,a)},CompareAcceleration(a,cmp,x){this._runtime.RequestDeviceMotionEvent();
+let v=0;if(a===0)v=this._accWithGX;else if(a===1)v=this._accWithGY;else if(a===2)v=this._accWithGZ;else if(a===3)v=this._accX;else if(a===4)v=this._accY;else v=this._accZ;return C3.compare(v,cmp,x)},OnNthTouchStart(index){index=Math.floor(index);return index===this._triggerIndex},OnNthTouchEnd(index){index=Math.floor(index);return index===this._triggerIndex},HasNthTouch(index){index=Math.floor(index);return this._touches.size>=index+1},OnHoldGesture(){return true},OnTapGesture(){return true},OnDoubleTapGesture(){return true},
+OnHoldGestureObject(objectClass){if(!objectClass)return false;if(!this._IsClientPosOnCanvas(this._curTouchX,this._curTouchY))return false;return this._runtime.GetCollisionEngine().TestAndSelectCanvasPointOverlap(objectClass,this._curTouchX,this._curTouchY,false)},OnTapGestureObject(objectClass){if(!objectClass)return false;if(!this._IsClientPosOnCanvas(this._curTouchX,this._curTouchY))return false;return this._runtime.GetCollisionEngine().TestAndSelectCanvasPointOverlap(objectClass,this._curTouchX,
+this._curTouchY,false)},OnDoubleTapGestureObject(objectClass){if(!objectClass)return false;if(!this._IsClientPosOnCanvas(this._curTouchX,this._curTouchY))return false;return this._runtime.GetCollisionEngine().TestAndSelectCanvasPointOverlap(objectClass,this._curTouchX,this._curTouchY,false)},OnPermissionGranted(type){return this._triggerPermission===type},OnPermissionDenied(type){return this._triggerPermission===type}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.Touch.Acts={RequestPermission(type){this._RequestPermission(type)}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.Touch.Exps={TouchCount(){return this._touches.size},X(layerParam){const touchInfo=this._GetTouchByIndex(this._getTouchIndex);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,true)},Y(layerParam){const touchInfo=this._GetTouchByIndex(this._getTouchIndex);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,false)},XAt(index,layerParam){const touchInfo=
+this._GetTouchByIndex(index);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,true)},YAt(index,layerParam){const touchInfo=this._GetTouchByIndex(index);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,false)},XForID(id,layerParam){const touchInfo=this._touches.get(id);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,true)},YForID(id,layerParam){const touchInfo=
+this._touches.get(id);if(!touchInfo)return 0;return touchInfo.GetPositionForLayer(this._runtime.GetCurrentLayout(),layerParam,false)},AbsoluteX(){const touchInfo=this._GetTouchByIndex(0);if(touchInfo)return touchInfo.GetX();else return 0},AbsoluteY(){const touchInfo=this._GetTouchByIndex(0);if(touchInfo)return touchInfo.GetY();else return 0},AbsoluteXAt(index){const touchInfo=this._GetTouchByIndex(index);if(touchInfo)return touchInfo.GetX();else return 0},AbsoluteYAt(index){const touchInfo=this._GetTouchByIndex(index);
+if(touchInfo)return touchInfo.GetY();else return 0},AbsoluteXForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetX();else return 0},AbsoluteYForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetY();else return 0},SpeedAt(index){const touchInfo=this._GetTouchByIndex(index);if(touchInfo)return touchInfo.GetSpeed();else return 0},SpeedForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetSpeed();else return 0},AngleAt(index){const touchInfo=
+this._GetTouchByIndex(index);if(touchInfo)return C3.toDegrees(touchInfo.GetAngle());else return 0},AngleForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return C3.toDegrees(touchInfo.GetAngle());else return 0},CompassHeading(){this._runtime.RequestDeviceOrientationEvent();return this._orientCompassHeading},Alpha(){this._runtime.RequestDeviceOrientationEvent();return this._orientAlpha},Beta(){this._runtime.RequestDeviceOrientationEvent();return this._orientBeta},Gamma(){this._runtime.RequestDeviceOrientationEvent();
+return this._orientGamma},AccelerationXWithG(){this._runtime.RequestDeviceMotionEvent();return this._accWithGX},AccelerationYWithG(){this._runtime.RequestDeviceMotionEvent();return this._accWithGY},AccelerationZWithG(){this._runtime.RequestDeviceMotionEvent();return this._accWithGZ},AccelerationX(){this._runtime.RequestDeviceMotionEvent();return this._accX},AccelerationY(){this._runtime.RequestDeviceMotionEvent();return this._accY},AccelerationZ(){this._runtime.RequestDeviceMotionEvent();return this._accZ},
+TouchIndex(){return this._triggerIndex},TouchID(){return this._triggerId},WidthForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetWidth();else return 0},HeightForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetHeight();else return 0},PressureForID(id){const touchInfo=this._touches.get(id);if(touchInfo)return touchInfo.GetPressure();else return 0}}};
+
+
+'use strict';{const C3=self.C3;const GESTURE_HOLD_THRESHOLD=15;const GESTURE_HOLD_TIMEOUT=500;const GESTURE_TAP_TIMEOUT=333;const GESTURE_DOUBLETAP_THRESHOLD=25;let lastTapX=-1E3;let lastTapY=-1E3;let lastTapTime=-1E4;C3.Plugins.Touch.TouchInfo=class TouchInfo extends C3.DefendedBase{constructor(){super();this._pointerId=0;this._startIndex=0;this._startTime=0;this._time=0;this._lastTime=0;this._startX=0;this._startY=0;this._x=0;this._y=0;this._lastX=0;this._lastY=0;this._width=0;this._height=0;this._pressure=
+0;this._hasTriggeredHold=false;this._isTooFarForHold=false}Release(){}Init(nowTime,x,y,id,index){this._pointerId=id;this._startIndex=index;this._time=nowTime;this._lastTime=nowTime;this._startTime=nowTime;this._startX=x;this._startY=y;this._x=x;this._y=y;this._lastX=x;this._lastY=y}Update(nowTime,x,y,width,height,pressure){this._lastTime=this._time;this._time=nowTime;this._lastX=this._x;this._lastY=this._y;this._x=x;this._y=y;this._width=width;this._height=height;this._pressure=pressure;if(!this._isTooFarForHold&&
+C3.distanceTo(this._startX,this._startY,this._x,this._y)>=GESTURE_HOLD_THRESHOLD)this._isTooFarForHold=true}GetId(){return this._pointerId}GetStartIndex(){return this._startIndex}GetTime(){return this._time}_SetLastTime(t){this._lastTime=t}GetX(){return this._x}GetY(){return this._y}GetSpeed(){const dist=C3.distanceTo(this._x,this._y,this._lastX,this._lastY);const dt=(this._time-this._lastTime)/1E3;if(dt>0)return dist/dt;else return 0}GetAngle(){return C3.angleTo(this._lastX,this._lastY,this._x,this._y)}GetWidth(){return this._width}GetHeight(){return this._height}GetPressure(){return this._pressure}ShouldTriggerHold(nowTime){if(this._hasTriggeredHold)return false;
+if(nowTime-this._startTime>=GESTURE_HOLD_TIMEOUT&&!this._isTooFarForHold&&C3.distanceTo(this._startX,this._startY,this._x,this._y)<GESTURE_HOLD_THRESHOLD){this._hasTriggeredHold=true;return true}return false}ShouldTriggerTap(nowTime){if(this._hasTriggeredHold)return"";if(nowTime-this._startTime<=GESTURE_TAP_TIMEOUT&&!this._isTooFarForHold&&C3.distanceTo(this._startX,this._startY,this._x,this._y)<GESTURE_HOLD_THRESHOLD)if(nowTime-lastTapTime<=GESTURE_TAP_TIMEOUT*2&&C3.distanceTo(lastTapX,lastTapY,
+this._x,this._y)<GESTURE_DOUBLETAP_THRESHOLD){lastTapX=-1E3;lastTapY=-1E3;lastTapTime=-1E4;return"double-tap"}else{lastTapX=this._x;lastTapY=this._y;lastTapTime=nowTime;return"single-tap"}return""}GetPositionForLayer(layout,layerNameOrNumber,getx){if(typeof layerNameOrNumber==="undefined"){const layer=layout.GetLayerByIndex(0);return layer.CanvasCssToLayer_DefaultTransform(this._x,this._y)[getx?0:1]}else{const layer=layout.GetLayer(layerNameOrNumber);if(layer)return layer.CanvasCssToLayer(this._x,
+this._y)[getx?0:1];else return 0}}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.TiledBg=class TiledBgPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;function WrapModeToStr(wrapMode){switch(wrapMode){case 0:return"clamp-to-edge";case 1:return"repeat";case 2:return"mirror-repeat"}return"repeat"}C3.Plugins.TiledBg.Type=class TiledBgType extends C3.SDKTypeBase{constructor(objectClass,exportData){super(objectClass);this._wrapX="repeat";this._wrapY="repeat";if(exportData){this._wrapX=WrapModeToStr(exportData[0]);this._wrapY=WrapModeToStr(exportData[1])}}Release(){super.Release()}OnCreate(){this.GetImageInfo().LoadAsset(this._runtime)}LoadTextures(renderer){return this.GetImageInfo().LoadStaticTexture(renderer,
+{sampling:this._runtime.GetSampling(),wrapX:this._wrapX,wrapY:this._wrapY})}ReleaseTextures(){this.GetImageInfo().ReleaseTexture()}}};
+
+
+'use strict';{const C3=self.C3;const INITIALLY_VISIBLE=0;const ORIGIN=1;const IMAGE_OFFSET_X=4;const IMAGE_OFFSET_Y=5;const IMAGE_SCALE_X=6;const IMAGE_SCALE_Y=7;const IMAGE_ANGLE=8;const tempQuad=C3.New(C3.Quad);const rcTex=C3.New(C3.Rect);const qTex=C3.New(C3.Quad);C3.Plugins.TiledBg.Instance=class TiledBgInstance extends C3.SDKWorldInstanceBase{constructor(inst,properties){super(inst);this._imageOffsetX=0;this._imageOffsetY=0;this._imageScaleX=1;this._imageScaleY=1;this._imageAngle=0;this._ownImageInfo=
+null;if(properties){this.GetWorldInfo().SetVisible(!!properties[INITIALLY_VISIBLE]);this._imageOffsetX=properties[IMAGE_OFFSET_X];this._imageOffsetY=properties[IMAGE_OFFSET_Y];this._imageScaleX=properties[IMAGE_SCALE_X];this._imageScaleY=properties[IMAGE_SCALE_Y];this._imageAngle=C3.toRadians(properties[IMAGE_ANGLE])}}Release(){this._ReleaseOwnImage();super.Release()}_ReleaseOwnImage(){if(this._ownImageInfo){this._ownImageInfo.Release();this._ownImageInfo=null}}Draw(renderer){const imageInfo=this.GetCurrentImageInfo();
+const texture=imageInfo.GetTexture();if(!texture)return;const wi=this.GetWorldInfo();let q=wi.GetBoundingQuad();renderer.SetTexture(texture);const imageWidth=imageInfo.GetWidth();const imageHeight=imageInfo.GetHeight();const imageOffsetX=this._imageOffsetX/imageWidth;const imageOffsetY=this._imageOffsetY/imageHeight;rcTex.set(0,0,wi.GetWidth()/(imageWidth*this._imageScaleX),wi.GetHeight()/(imageHeight*this._imageScaleY));rcTex.offset(-imageOffsetX,-imageOffsetY);if(this._runtime.IsPixelRoundingEnabled()){const ox=
+Math.round(wi.GetX())-wi.GetX();const oy=Math.round(wi.GetY())-wi.GetY();tempQuad.copy(q);tempQuad.offset(ox,oy);q=tempQuad}if(this._imageAngle===0)renderer.Quad3(q,rcTex);else{qTex.setFromRotatedRect(rcTex,-this._imageAngle);renderer.Quad4(q,qTex)}}GetCurrentImageInfo(){return this._ownImageInfo||this._objectClass.GetImageInfo()}_SetImageOffsetX(x){if(this._imageOffsetX===x)return;this._imageOffsetX=x;this._runtime.UpdateRender()}_GetImageOffsetX(){return this._imageOffsetX}_SetImageOffsetY(y){if(this._imageOffsetY===
+y)return;this._imageOffsetY=y;this._runtime.UpdateRender()}_GetImageOffsetY(){return this._imageOffsetY}_SetImageScaleX(x){if(this._imageScaleX===x)return;this._imageScaleX=x;this._runtime.UpdateRender()}_GetImageScaleX(){return this._imageScaleX}_SetImageScaleY(y){if(this._imageScaleY===y)return;this._imageScaleY=y;this._runtime.UpdateRender()}_GetImageScaleY(){return this._imageScaleY}_SetImageAngle(a){if(this._imageAngle===a)return;this._imageAngle=a;this._runtime.UpdateRender()}_GetImageAngle(){return this._imageAngle}GetPropertyValueByIndex(index){switch(index){case IMAGE_OFFSET_X:return this._GetImageOffsetX();
+case IMAGE_OFFSET_Y:return this._GetImageOffsetY();case IMAGE_SCALE_X:return this._GetImageScaleX();case IMAGE_SCALE_Y:return this._GetImageScaleY();case IMAGE_ANGLE:return this._GetImageAngle()}}SetPropertyValueByIndex(index,value){switch(index){case IMAGE_OFFSET_X:this._SetImageOffsetX(value);break;case IMAGE_OFFSET_Y:this._SetImageOffsetY(value);break;case IMAGE_SCALE_X:this._SetImageScaleX(value);break;case IMAGE_SCALE_Y:this._SetImageScaleY(value);break;case IMAGE_ANGLE:this._SetImageAngle(value);
+break}}GetScriptInterfaceClass(){return self.ITiledBackgroundInstance}};const map=new WeakMap;self.ITiledBackgroundInstance=class ITiledBackgroundInstance extends self.IWorldInstance{constructor(){super();map.set(this,self.IInstance._GetInitInst().GetSdkInstance())}set imageOffsetX(x){map.get(this)._SetImageOffsetX(x)}get imageOffsetX(){return map.get(this)._GetImageOffsetX()}set imageOffsetY(y){map.get(this)._SetImageOffsetY(y)}get imageOffsetY(){return map.get(this)._GetImageOffsetY()}set imageScaleX(x){map.get(this)._SetImageScaleX(x)}get imageScaleX(){return map.get(this)._GetImageScaleX()}set imageScaleY(y){map.get(this)._SetImageScaleY(y)}get imageScaleY(){return map.get(this)._GetImageScaleY()}set imageAngle(a){map.get(this)._SetImageAngle(a)}get imageAngle(){return map.get(this)._GetImageAngle()}set imageAngleDegrees(a){map.get(this)._SetImageAngle(C3.toRadians(a))}get imageAngleDegrees(){return C3.toDegrees(map.get(this)._GetImageAngle())}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.TiledBg.Cnds={OnURLLoaded(){return true},OnURLFailed(){return true}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.TiledBg.Acts={SetImageOffsetX(x){this._SetImageOffsetX(x)},SetImageOffsetY(y){this._SetImageOffsetY(y)},SetImageScaleX(x){this._SetImageScaleX(x/100)},SetImageScaleY(y){this._SetImageScaleY(y/100)},SetImageAngle(a){this._SetImageAngle(C3.toRadians(a))},SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateRender()},async LoadURL(url,crossOrigin){if(this._ownImageInfo&&this._ownImageInfo.GetURL()===url)return;const runtime=this._runtime;
+const imageInfo=C3.New(C3.ImageInfo);await imageInfo.LoadDynamicAsset(runtime,url);if(!imageInfo.IsLoaded()){this.Trigger(C3.Plugins.TiledBg.Cnds.OnURLFailed);return}if(this.WasReleased()){imageInfo.Release();return null}const texture=await imageInfo.LoadStaticTexture(runtime.GetWebGLRenderer(),{sampling:this._runtime.GetSampling(),wrapX:"repeat",wrapY:"repeat"});if(!texture)return;if(this.WasReleased()){imageInfo.Release();return}this._ReleaseOwnImage();this._ownImageInfo=imageInfo;runtime.UpdateRender();
+await this.TriggerAsync(C3.Plugins.TiledBg.Cnds.OnURLLoaded)}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.TiledBg.Exps={ImageWidth(){return this.GetCurrentImageInfo().GetWidth()},ImageHeight(){return this.GetCurrentImageInfo().GetHeight()},ImageOffsetX(){return this._imageOffsetX},ImageOffsetY(){return this._imageOffsetY},ImageScaleX(){return this._imageScaleX*100},ImageScaleY(){return this._imageScaleY*100},ImageAngle(){return C3.toDegrees(this._imageAngle)}}};
+
+
 'use strict';{const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
 
 
@@ -2876,6 +2977,9 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Text,
 		C3.Plugins.Button,
 		C3.Plugins.Keyboard,
+		C3.Plugins.PlatformInfo,
+		C3.Plugins.Touch,
+		C3.Plugins.TiledBg,
 		C3.Behaviors.EightDir,
 		C3.Behaviors.scrollto,
 		C3.Plugins.Button.Cnds.OnClicked,
@@ -2891,6 +2995,7 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Acts.SyncObject,
 		C3.Plugins.Multiplayer.Acts.SyncObjectInstanceVar,
 		C3.Plugins.TextBox.Acts.SetCSSStyle,
+		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Multiplayer.Cnds.OnSignallingConnected,
 		C3.Plugins.Multiplayer.Acts.SignallingLogin,
 		C3.Plugins.Multiplayer.Cnds.OnSignallingLoggedIn,
@@ -2900,9 +3005,11 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Cnds.IsHost,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.Multiplayer.Acts.AssociateObjectWithPeer,
 		C3.Plugins.Multiplayer.Exps.MyID,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
+		C3.Behaviors.scrollto.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.Multiplayer.Cnds.OnSignallingLeftRoom,
@@ -2915,17 +3022,17 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Cnds.OnPeerDisconnected,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.System.Cnds.ForEach,
-		C3.Plugins.System.Cnds.Compare,
-		C3.Plugins.System.Exps.getbit,
-		C3.Plugins.Sprite.Acts.SetMirrored,
 		C3.Behaviors.EightDir.Cnds.IsMoving,
 		C3.Plugins.Sprite.Acts.SetAnim,
-		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Multiplayer.Exps.PeerID,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
+		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Behaviors.EightDir.Acts.SimulateControl,
+		C3.Plugins.Sprite.Acts.SetMirrored,
 		C3.Plugins.Multiplayer.Exps.PeerState,
+		C3.Plugins.System.Exps.getbit,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Multiplayer.Acts.InputPredictObject,
 		C3.Plugins.Multiplayer.Cnds.OnClientUpdate,
@@ -2949,6 +3056,14 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		{liam: 0},
 		{avery: 0},
 		{Keyboard: 0},
+		{TestBox: 0},
+		{PlatformInfo: 0},
+		{mup: 0},
+		{mleft: 0},
+		{mdown: 0},
+		{mright: 0},
+		{Touch: 0},
+		{TiledBackground: 0},
 		{"8Direction": 0},
 		{ScrollTo: 0},
 		{Players: 0},
@@ -3087,6 +3202,8 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		() => "You are the host.",
 		() => "Host",
 		() => "Miles",
+		() => 427,
+		() => 240,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
@@ -3114,21 +3231,8 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (("> " + f0()) + " disconnected.");
 		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => f0(n1.ExpInstVar_Family(), 1);
-		},
-		() => 1,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => f0(n1.ExpInstVar_Family(), 3);
-		},
 		() => "1",
 		() => "0",
-		() => 427,
-		() => 240,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -3139,10 +3243,21 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpInstVar_Family(), 0);
 		},
+		() => 1,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpInstVar_Family(), 1);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpInstVar_Family(), 2);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpInstVar_Family(), 3);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -3187,7 +3302,9 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar_Family();
-		}
+		},
+		() => "press",
+		() => "idle"
 	];
 }
 
