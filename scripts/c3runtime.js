@@ -2889,6 +2889,7 @@ inst.GetBehaviorInstanceFromCtor(C3.Behaviors.scrollto);if(!behInst||!behInst.Ge
 		C3.Plugins.Multiplayer.Acts.SignallingConnect,
 		C3.Plugins.Multiplayer.Acts.AddClientInputValue,
 		C3.Plugins.Multiplayer.Acts.SyncObject,
+		C3.Plugins.Multiplayer.Acts.SyncObjectInstanceVar,
 		C3.Plugins.TextBox.Acts.SetCSSStyle,
 		C3.Plugins.Multiplayer.Cnds.OnSignallingConnected,
 		C3.Plugins.Multiplayer.Acts.SignallingLogin,
